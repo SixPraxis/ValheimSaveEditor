@@ -1,0 +1,6 @@
+.vscode/launch.json
+itemList.txt
+dist/
+build/
+vse.spec
+__pycache__/

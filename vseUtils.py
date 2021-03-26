@@ -191,8 +191,11 @@ def parseWorldsData(worlds):
             pinArray.append(pin)
             offset += struct.calcsize(formatString)
 
-        publicReference = struct.unpack_from('<?', world[10], offset)[0]
-        mapDataArray = [num, num2, mapGrid, pinCount, pinArray, publicReference]
+        if num >= 4:
+            publicReference = struct.unpack_from('<?', world[10], offset)[0]
+            mapDataArray = [num, num2, mapGrid, pinCount, pinArray, publicReference]
+        else:
+            mapDataArray = [num, num2, mapGrid, pinCount, pinArray]
         tempWorld.append(mapDataArray)
         parsedWorlds.append(tempWorld)
     return parsedWorlds
@@ -284,7 +287,9 @@ def writeSaveFile(character, path):
             pinNamePattern, pinNameInt, pinName = stringEncoder(pin[0])
             worldData5 += struct.pack('<' + pinNamePattern + 'fffI?', pinNameInt, pinName, pin[1], pin[2], pin[3], pin[4], pin[5])
         pubRef = world.mapData.pins
-        worldData6 = struct.pack('<?', pubRef)
+        worldData6 = b''
+        if world.mapData.num1 >= 4:
+            worldData6 = struct.pack('<?', pubRef)
         world.mapDataLength = len(worldData2 + worldData3 + worldData4 + worldData5 + worldData6)
         worldData1 = struct.pack('<Q?fff?fff?ffffff?I', world.worldKey, world.customSpawnBool, world.spawnPoint[0], world.spawnPoint[1], world.spawnPoint[2], world.logoutPointBool, world.logoutPoint[0], world.logoutPoint[1], world.logoutPoint[2], world.deathPoint, world.deathPoint[0], world.deathPoint[1], world.deathPoint[2], world.homePoint[0], world.homePoint[1], world.homePoint[2], world.mapDataBool, world.mapDataLength)
         worldByteArray += worldData1 + worldData2 + worldData3 + worldData4 + worldData5 + worldData6

@@ -239,7 +239,9 @@ class VseMapData:
         self.explored = mapData[2]
         self.pinCount = mapData[3]
         self.pins = mapData[4]
-        self.publicRef = mapData[5]
+        self.publicRef = None
+        if self.num1 >= 4:
+            self.publicRef = mapData[5]
 
 def createCharacter(path):
     characterData, worlds = loadSaveFile(path)
