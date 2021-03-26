@@ -1,5 +1,5 @@
 # ValheimSaveEditor
-Allows modification of the values inside a Valheim character save file. Make sure the game is closed, open your character's fch file, make modifications, and save. A backup of your original save file is made when you save, it'll be in the same location as your character files.
+Allows modification of the values inside a Valheim character save file. Make sure the game is closed, open your character's fch file, make modifications, and save. A backup of your original save file is made when you save, it'll be in the same location as your character files. Some values are limited by the game and will be brought back inline once the game loads the save. Have fun.
 
 Currently supports modifying:
 * Player Name
@@ -28,7 +28,7 @@ For adding items to your inventory refer to this awesome list for item names:
 Disabling Steam Cloud saves for Valheim is recommended. Use at your own risk. I am not responsible for any saves that are corrupted or lost while using this program.
 
 ### FAQ
-__Increasing my max health or current health/stamina value doesn't raise it in game?__
+__Increasing my max health/stamina or current health value doesn't raise it in game?__
 
 A: Your max health is governed by your food, modify the health value of a food item, then match your current health value to that.
 
