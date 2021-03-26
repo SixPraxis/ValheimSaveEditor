@@ -1,4 +1,4 @@
-""" vseUtils.py: File handling and data parsing methods for Valheim Character Editor \n
+""" vseUtils.py: File handling and data parsing methods for Valheim Save Editor \n
     Methods: \n
     loadSaveFile() - Accepts path to Valheim character save file. Returns two arrays with parsed data. \n
     readSaveFile() - Read byte values from Valheim character save file. Returns two arrays with binary data. \n
