@@ -11,6 +11,7 @@ Currently supports modifying:
   * Add or Delete Items
   * Stack size
   * Quality(upgrade level) of items
+  * Shield color variants
   * Crafter Name/ID
   * Durability
 * Character Appearance
