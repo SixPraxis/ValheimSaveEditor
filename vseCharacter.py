@@ -95,8 +95,8 @@ class VseInventory:
             slot = item.posY * 8 + item.posX
             self.slots['slot' + str(slot)] = item
 
-    def createItem(self, name, stackSize, durability, posX, posY, equiped = 0, quality = 1, variant = 0, crafterID= 0, crafterName = ''):
-        itemData = [name, stackSize, durability, posX, posY, equiped, quality, variant, crafterID, crafterName]
+    def createItem(self, name, stackSize, durability, posX, posY, equipped = 0, quality = 1, variant = 0, crafterID= 0, crafterName = ''):
+        itemData = [name, stackSize, durability, posX, posY, equipped, quality, variant, crafterID, crafterName]
         return VseItem(itemData)
 
 
@@ -107,7 +107,7 @@ class VseItem:
         self.durability = itemData[2]
         self.posX = itemData[3]
         self.posY = itemData[4]
-        self.equiped = itemData[5]
+        self.equipped = itemData[5]
         self.quality = itemData[6]
         self.variant = itemData[7]
         self.crafterID = itemData[8]

@@ -96,7 +96,7 @@ inventoryItemColumnLayout = [[gui.Text('Item:'), gui.In('', size=(18, 1), key='i
                 [gui.Text('Durability:'), gui.In('', size=(18, 1), key='itemDurabilityKey', enable_events=True)],
                 [gui.Text('PosX:'), gui.Text('', size=(15, 1), key='itemPosXKey')],
                 [gui.Text('PosY:'), gui.Text('', size=(15, 1), key='itemPosYKey')],
-                [gui.Text('Equiped:'), gui.In('', size=(18, 1), key='itemEquipedKey', enable_events=True)],
+                [gui.Text('Equipped:'), gui.Checkbox('', size=(12,1), key='itemEquippedKey', enable_events=True)],
                 [gui.Text('Quality:'), gui.In('', size=(18, 1), key='itemQualityKey', enable_events=True)],
                 [gui.Text('Variant:'), gui.In('', size=(18, 1), key='itemVariantKey', enable_events=True)],
                 [gui.Text('CrafterID:'), gui.In('', size=(18, 1), key='itemCrafterIDKey', enable_events=True)],
@@ -363,18 +363,19 @@ def updateItemColumn(event, values, character, window):
     eventSlot = event[0:-3]
     if window[eventSlot + 'ItemKey'].get() != '':
         item = character.inventory.slots[eventSlot]
-        window['itemNameKey'].update(item.name)
-        window['itemStackKey'].update(item.stackSize)
-        window['itemDurabilityKey'].update(item.durability)
+        window['itemNameKey'].update(item.name, disabled = False)
+        window['itemStackKey'].update(item.stackSize, disabled = False)
+        window['itemDurabilityKey'].update(item.durability, disabled = False)
         window['itemPosXKey'].update(item.posX)
         window['itemPosYKey'].update(item.posY)
-        window['itemEquipedKey'].update(item.equiped)
-        window['itemQualityKey'].update(item.quality)
-        window['itemVariantKey'].update(item.variant)
-        window['itemCrafterIDKey'].update(item.crafterID)
-        window['itemCrafterNameKey'].update(item.crafterName)
+        window['itemEquippedKey'].update(item.equipped, disabled = False)
+        window['itemQualityKey'].update(item.quality, disabled = False)
+        window['itemVariantKey'].update(item.variant, disabled = False)
+        window['itemCrafterIDKey'].update(item.crafterID, disabled = False)
+        window['itemCrafterNameKey'].update(item.crafterName, disabled = False)
         window['submitButtonKey'].update(visible = True)
         window['deleteButtonKey'].update(visible = True)
+        window['newItemButtonKey'].update(visible = False)
     else:
         posX = int(event[4:-3])%8
         posY = floor(int(event[4:-3])/8)
@@ -383,7 +384,7 @@ def updateItemColumn(event, values, character, window):
         window['itemNameKey'].update(disabled = True)
         window['itemStackKey'].update(disabled = True)
         window['itemDurabilityKey'].update(disabled = True)
-        window['itemEquipedKey'].update(disabled = True)
+        window['itemEquippedKey'].update(disabled = True)
         window['itemQualityKey'].update(disabled = True)
         window['itemVariantKey'].update(disabled = True)
         window['itemCrafterIDKey'].update(disabled = True)
@@ -399,7 +400,7 @@ def deleteItem(mostRecentSlot, character, window):
     window['itemDurabilityKey'].update('')
     window['itemPosXKey'].update('')
     window['itemPosYKey'].update('')
-    window['itemEquipedKey'].update('')
+    window['itemEquippedKey'].update('')
     window['itemQualityKey'].update('')
     window['itemVariantKey'].update('')
     window['itemCrafterIDKey'].update('')
@@ -417,7 +418,7 @@ def newItem(mostRecentSlot, character, window):
     window['itemDurabilityKey'].update(item.durability, disabled = False)
     window['itemPosXKey'].update(item.posX)
     window['itemPosYKey'].update(item.posY)
-    window['itemEquipedKey'].update(item.equiped, disabled = False)
+    window['itemEquippedKey'].update(item.equipped, disabled = False)
     window['itemQualityKey'].update(item.quality, disabled = False)
     window['itemVariantKey'].update(item.variant, disabled = False)
     window['itemCrafterIDKey'].update(item.crafterID, disabled = False)
@@ -431,7 +432,7 @@ def updateItem(mostRecentSlot, values, character):
     character.inventory.slots[mostRecentSlot].name = values['itemNameKey']
     character.inventory.slots[mostRecentSlot].stackSize = int(values['itemStackKey'])
     character.inventory.slots[mostRecentSlot].durability = float(values['itemDurabilityKey'])
-    character.inventory.slots[mostRecentSlot].equiped = bool(values['itemEquipedKey'])
+    character.inventory.slots[mostRecentSlot].equipped = bool(values['itemEquippedKey'])
     character.inventory.slots[mostRecentSlot].quality = int(values['itemQualityKey'])
     character.inventory.slots[mostRecentSlot].variant = int(values['itemVariantKey'])
     character.inventory.slots[mostRecentSlot].crafterID = int(values['itemCrafterIDKey'])

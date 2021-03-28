@@ -108,9 +108,9 @@ def parseCharacterData(characterData):
         tempOffset = offset + struct.calcsize(itemFormatString)
         itemFormatString = addStringToFormat(itemFormatString, buffer, tempOffset)
 
-        text, stack, durability, posX, posY, equiped, quality, variant, crafterID, crafterName = struct.unpack_from(itemFormatString, buffer, offset)
+        text, stack, durability, posX, posY, equipped, quality, variant, crafterID, crafterName = struct.unpack_from(itemFormatString, buffer, offset)
         
-        item = [text[1::].decode('utf-8'), stack, durability, posX, posY, equiped, quality, variant, crafterID, crafterName[1::].decode('utf-8')]
+        item = [text[1::].decode('utf-8'), stack, durability, posX, posY, equipped, quality, variant, crafterID, crafterName[1::].decode('utf-8')]
         inventory.append(item)
         
         offset += struct.calcsize(itemFormatString)
@@ -317,7 +317,7 @@ def writeSaveFile(character, path):
             textPattern, textInt, text = stringEncoder(item.name)
             crafterNamePattern, crafterNameInt, crafterName = stringEncoder(item.crafterName)
             itemPattern += textPattern + 'IfII?IIQ' + crafterNamePattern
-            inventoryBytes += struct.pack(itemPattern, textInt, text, item.stackSize, item.durability, item.posX, item.posY, item.equiped, item.quality, item.variant, item.crafterID, crafterNameInt, crafterName)
+            inventoryBytes += struct.pack(itemPattern, textInt, text, item.stackSize, item.durability, item.posX, item.posY, item.equipped, item.quality, item.variant, item.crafterID, crafterNameInt, crafterName)
 
     playerDataBytes += inventoryBytes
     playerDataBytes += intPatternLoopToBytes(character.knownRecipes)
