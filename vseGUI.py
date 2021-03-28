@@ -9,7 +9,7 @@ from math import floor
 appdataPath = os.getenv('APPDATA')
 characterFolderPath = appdataPath[:-8] + '\\LocalLow\\IronGate\\Valheim\\characters'
 title = 'Valheim Save Editor'
-version = '1.0.0'
+version = '1.0.2'
 gui.theme('LightGrey3')
 #gui.theme('DarkAmber')
 
