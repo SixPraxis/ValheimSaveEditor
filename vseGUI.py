@@ -9,7 +9,7 @@ from math import floor
 appdataPath = os.getenv('APPDATA')
 characterFolderPath = appdataPath[:-8] + '\\LocalLow\\IronGate\\Valheim\\characters'
 title = 'Valheim Save Editor'
-version = '1.0.2'
+version = '1.0.3'
 gui.theme('LightGrey3')
 #gui.theme('DarkAmber')
 
@@ -400,7 +400,7 @@ def deleteItem(mostRecentSlot, character, window):
     window['itemDurabilityKey'].update('')
     window['itemPosXKey'].update('')
     window['itemPosYKey'].update('')
-    window['itemEquippedKey'].update('')
+    window['itemEquippedKey'].update(0)
     window['itemQualityKey'].update('')
     window['itemVariantKey'].update('')
     window['itemCrafterIDKey'].update('')

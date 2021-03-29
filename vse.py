@@ -1,7 +1,5 @@
 """Valheim Save Editor"""
 
-import vseUtils
-import vseCharacter
 import vseGUI
 
 def main():
