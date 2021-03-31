@@ -286,7 +286,7 @@ def writeSaveFile(character, path):
         for pin in world.mapData.pins:
             pinNamePattern, pinNameInt, pinName = stringEncoder(pin[0])
             worldData5 += struct.pack('<' + pinNamePattern + 'fffI?', pinNameInt, pinName, pin[1], pin[2], pin[3], pin[4], pin[5])
-        pubRef = world.mapData.pins
+        pubRef = world.mapData.publicRef
         worldData6 = b''
         if world.mapData.num1 >= 4:
             worldData6 = struct.pack('<?', pubRef)
