@@ -9,7 +9,7 @@ from math import floor
 appdataPath = os.getenv('APPDATA')
 characterFolderPath = appdataPath[:-8] + '\\LocalLow\\IronGate\\Valheim\\characters'
 title = 'Valheim Save Editor'
-version = '1.0.3'
+version = '1.0.4'
 gui.theme('LightGrey3')
 #gui.theme('DarkAmber')
 
@@ -108,17 +108,18 @@ inventoryTabLayout = [[gui.Column(inventorySlotColumnLayout, element_justificati
 
 appearanceTabLayout = [[gui.Text('Model Type'), gui.Spin(values=[1, 0], initial_value='', size=(14,1), key='modelKey')],
             [gui.Text('_'*60)],
+            [gui.Checkbox('Overload Mode', enable_events=True, key='overloadKey')],
             [gui.Text('Skin Color')],
-            [gui.Text('Val1: '), gui.Slider(range=(0, 100), size=(30, 15), orientation='h', key='skinVal1Key')],
-            [gui.Text('Val2: '), gui.Slider(range=(0, 100), size=(30, 15), orientation='h', key='skinVal2Key')],
-            [gui.Text('Val3: '), gui.Slider(range=(0, 100), size=(30, 15), orientation='h', key='skinVal3Key')],
+            [gui.Text('Red:', size=(5, 1)), gui.Slider(range=(0, 100), size=(30, 15), orientation='h', key='skinVal1Key')],
+            [gui.Text('Green:', size=(5, 1)), gui.Slider(range=(0, 100), size=(30, 15), orientation='h', key='skinVal2Key')],
+            [gui.Text('Blue:', size=(5, 1)), gui.Slider(range=(0, 100), size=(30, 15), orientation='h', key='skinVal3Key')],
             [gui.Text('_'*60)],
             [gui.Text('Hair'), gui.Combo(values=['No Hair', 'Braided 1', 'Braided 2', 'Braided 3', 'Braided 4', 'Long 1', 'Ponytail 1', 'Ponytail 2', 'Ponytail 3', 'Ponytail 4', 'Short 1', 'Short 2', 'Side 1', 'Side 2', 'Side 3'], size=(14,1), key='hairKey')],
             [gui.Text('Beard'), gui.Combo(values=['No Beard', 'Braided 1', 'Braided 2', 'Braided 3', 'Braided 4', 'Long 1', 'Long 2', 'Short 1', 'Short 2', 'Short 3', 'Thick 1'], size=(14,1), key='beardKey')],
             [gui.Text('Hair Color')],
-            [gui.Text('Val1: '), gui.Slider(range=(0, 100), size=(30, 15), orientation='h', key='hairVal1Key')],
-            [gui.Text('Val2: '), gui.Slider(range=(0, 100), size=(30, 15), orientation='h', key='hairVal2Key')],
-            [gui.Text('Val3: '), gui.Slider(range=(0, 100), size=(30, 15), orientation='h', key='hairVal3Key')],
+            [gui.Text('Red:', size=(5, 1)), gui.Slider(range=(0, 100), size=(30, 15), orientation='h', key='hairVal1Key')],
+            [gui.Text('Green:', size=(5, 1)), gui.Slider(range=(0, 100), size=(30, 15), orientation='h', key='hairVal2Key')],
+            [gui.Text('Blue:', size=(5, 1)), gui.Slider(range=(0, 100), size=(30, 15), orientation='h', key='hairVal3Key')],
             ]
 
 foodList = list(Food.foodDict.keys())
@@ -204,6 +205,11 @@ def startGUI():
             if 'slot' in event:
                 mostRecentSlot = event[0:-3]
                 updateItemColumn(event, values, character, window)
+        if event == 'overloadKey':
+            if values['overloadKey'] == True:
+                overloadValues(window)
+            if values['overloadKey'] == False:
+                overloadValues(window, False)
         if event == 'submitButtonKey':
             window[mostRecentSlot + 'ItemKey'].update(values['itemNameKey'])
             updateItem(mostRecentSlot, values, character)
@@ -232,32 +238,35 @@ def hairTranslator(value, beardSwitch = False, nameSwitch = False):
     hairModel = ['HairNone', 'Hair3', 'Hair11', 'Hair12', 'Hair13', 'Hair6', 'Hair1', 'Hair2', 'Hair4', 'Hair7', 'Hair5', 'Hair8', 'Hair9', 'Hair10', 'Hair14']
     
     #BugFix for some hairless characters not having a beard or hair value
-    if value == '':
+    try:
+        if value == '':
+            if beardSwitch:
+                if nameSwitch:
+                    value = 'No Beard'
+                else:
+                    value = 'BeardNone'
+            else:
+                if nameSwitch:
+                    value = 'No Hair'
+                else:
+                    value = 'HairNone'
+
         if beardSwitch:
             if nameSwitch:
-                value = 'No Beard'
+                index = beardName.index(value)
+                return beardModel[index]
             else:
-                value = 'BeardNone'
+                index = beardModel.index(value)
+                return beardName[index]
         else:
             if nameSwitch:
-                value = 'No Hair'
+                index = hairName.index(value)
+                return hairModel[index]
             else:
-                value = 'HairNone'
-
-    if beardSwitch:
-        if nameSwitch:
-            index = beardName.index(value)
-            return beardModel[index]
-        else:
-            index = beardModel.index(value)
-            return beardName[index]
-    else:
-        if nameSwitch:
-            index = hairName.index(value)
-            return hairModel[index]
-        else:
-            index = hairModel.index(value)
-            return hairName[index]
+                index = hairModel.index(value)
+                return hairName[index]
+    except ValueError:
+        return value
 
 
 def populateFields(character, window):
@@ -285,6 +294,8 @@ def populateFields(character, window):
     window['beardKey'].update(hairTranslator(character.beard, beardSwitch = True))
     window['hairKey'].update(hairTranslator(character.hair))
     window['modelKey'].update(character.playerModel)
+    if (character.skinColor.val1 > 1) or (character.skinColor.val2 > 1) or (character.skinColor.val3 > 1) or (character.hairColor.val1 > 1) or (character.hairColor.val2 > 1) or (character.hairColor.val3 > 1):
+        overloadValues(window)
     window['skinVal1Key'].update(character.skinColor.val1 * 100)
     window['skinVal2Key'].update(character.skinColor.val2 * 100)
     window['skinVal3Key'].update(character.skinColor.val3 * 100)
@@ -474,3 +485,20 @@ def populateWorldData(mostRecentWorld, character, window):
     window['homeYKey'].update(character.worlds[mostRecentWorld].homePoint[1])
     window['homeZKey'].update(character.worlds[mostRecentWorld].homePoint[2])
     
+def overloadValues(window, overload = True):
+    if overload:
+        window['skinVal1Key'].update(range=(0, 1000))
+        window['skinVal2Key'].update(range=(0, 1000))
+        window['skinVal3Key'].update(range=(0, 1000))
+        window['hairVal1Key'].update(range=(0, 1000))
+        window['hairVal2Key'].update(range=(0, 1000))
+        window['hairVal3Key'].update(range=(0, 1000))
+        window['overloadKey'].update(value=True)
+    if not overload:
+        window['skinVal1Key'].update(range=(0, 100))
+        window['skinVal2Key'].update(range=(0, 100))
+        window['skinVal3Key'].update(range=(0, 100))
+        window['hairVal1Key'].update(range=(0, 100))
+        window['hairVal2Key'].update(range=(0, 100))
+        window['hairVal3Key'].update(range=(0, 100)) 
+        window['overloadKey'].update(value=False)

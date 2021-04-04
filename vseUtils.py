@@ -131,11 +131,11 @@ def parseCharacterData(characterData):
     hairFormat = addStringToFormat('<', buffer, offset)
     hair = struct.unpack_from(hairFormat, buffer, offset)[0].decode('utf-8')[1::]
     offset += struct.calcsize(hairFormat)
-    
-    hairColor = struct.unpack_from('<fff', buffer, offset)
-    offset += struct.calcsize('<fff')
 
     skinColor = struct.unpack_from('<fff', buffer, offset)
+    offset += struct.calcsize('<fff')
+    
+    hairColor = struct.unpack_from('<fff', buffer, offset)
     offset += struct.calcsize('<fff')
 
     playerModel = struct.unpack_from('<I', buffer, offset)[0]
@@ -152,8 +152,8 @@ def parseCharacterData(characterData):
                 timeSinceDeath, guardianPower, guardianPowerCooldown, 
                 invNum, inventoryCount, inventory, knownRecipes, 
                 knownStations, knownMaterials, shownTutorials, 
-                uniques, trophies, knownBiomes, knownTexts, beard, hair, 
-                skinColor, hairColor, playerModel, foods, skillNum, skills]
+                uniques, trophies, knownBiomes, knownTexts, beard, hair, skinColor,
+                hairColor, playerModel, foods, skillNum, skills]
     
     characterData[9] = playerData
     return characterData
@@ -335,8 +335,8 @@ def writeSaveFile(character, path):
     hairPattern, hairInt, hair = stringEncoder(character.hair)
     playerDataBytes += struct.pack('<' + hairPattern, hairInt, hair)
 
-    playerDataBytes += struct.pack('<fff', character.hairColor.val1, character.hairColor.val2, character.hairColor.val3)
     playerDataBytes += struct.pack('<fff', character.skinColor.val1, character.skinColor.val2, character.skinColor.val3)
+    playerDataBytes += struct.pack('<fff', character.hairColor.val1, character.hairColor.val2, character.hairColor.val3)
     playerDataBytes += struct.pack('<I', character.playerModel)
 
     playerDataBytes += intPatternLoopToBytes(character.foods, 'sff')
